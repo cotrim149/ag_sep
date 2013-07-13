@@ -14,12 +14,15 @@ int valor_aleatorio(int denominador){
 
 
 void mutacao(int* cromossomo,int tamanho_cromossomo){
-	int opcao = 0;//valor_aleatorio(2);
+	int opcao = 1;//valor_aleatorio(2);
+	int qtd_genes_trocados = valor_aleatorio(tamanho_cromossomo);
+
+	int locus1 = 2;//valor_aleatorio(tamanho_cromossomo);
+	int locus2 = 4;//valor_aleatorio(tamanho_cromossomo);
+
+
 	switch(opcao){
-		case 0:		// troca simples
-			
-			int qtd_genes_trocados = valor_aleatorio(tamanho_cromossomo);
-			
+		case 0:		// troca simples			
 			for(int i=0; i< qtd_genes_trocados;i++){
 				int loco_aleatorio = valor_aleatorio(qtd_genes_trocados);
 				if(cromossomo[loco_aleatorio] == 1)
@@ -29,10 +32,12 @@ void mutacao(int* cromossomo,int tamanho_cromossomo){
 			}
 			
 		break;
-/*		case 1:		// inversao
-			cout << "funcao vazia\n\n" << endl;
+		case 1:		// inversao
+			int temp = cromossomo[locus1];
+			cromossomo[locus1] = cromossomo[locus2];
+			cromossomo[locus2] = temp;			
 		break;
-*/	}
+	}
 	
 }
 
@@ -44,8 +49,8 @@ int main(){
 
 
 	for(int i=0; i< qtd_genes; i++)
-		cromossomo[i] =0;
-
+		cromossomo[i] =valor_aleatorio(2);
+		
 	cout << "antes" << endl;
 	for(int i=0; i< qtd_genes; i++)
 		cout << "gene" << i+1 << ": " << cromossomo[i] << endl;
