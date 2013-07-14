@@ -5,7 +5,7 @@
 #define qtd_genes 5
 
 using namespace std;
-
+//teste
 int valor_aleatorio(int denominador){
 	int valor = rand();
 	
