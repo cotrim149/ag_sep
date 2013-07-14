@@ -5,7 +5,9 @@
 #define qtd_genes 5
 
 using namespace std;
-//teste
+
+
+//retorna um valor aleatorio entre 0 e o denominador
 int valor_aleatorio(int denominador){
 	int valor = rand();
 	
@@ -45,19 +47,27 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 
 	int ponto_cross_pai_1 = valor_aleatorio(tamanho_pai_1);
 	int ponto_cross_pai_2 = valor_aleatorio(tamanho_pai_2);
+	cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
+	cout<< endl <<"ponto cross pai 2" << ponto_cross_pai_2<<endl;
 	
-	int vetor_1[ponto_cross_pai_1];
+	
+	int vetor_1[ponto_cross_pai_1];//funciona como um buffer para nao perdermos informação do PAI_1
 	//int vetor_2[ponto_cross_pai_2];
 	
+	//FELIPE>> acho que esse laço tem que vir depos de calcular o maiot ponto cross mas ok
+	
+	
+	//BUG corrigido
 	for(int j=0; j <= ponto_cross_pai_1;j++){
 		vetor_1[j]= pai_1[j];
+		cout<< "PONTO CROSS"<<vetor_1[j]<< endl;
 	}
 	
 	int maior_ponto_cross;
 	if(ponto_cross_pai_1 >= ponto_cross_pai_2)
 		maior_ponto_cross = ponto_cross_pai_1;
 	else
-		maior_ponto_cross = ponto_cross_pai_2;
+		maior_ponto_cross = ponto_cross_pai_1;
 	
 	for(int i=maior_ponto_cross; i >= 0; i--){
 		pai_1[i]= pai_2[i];
@@ -68,6 +78,7 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 }
 
 int main(){
+	system("cls");
 	int cromossomo[qtd_genes];
 
 	srand(time(NULL));
