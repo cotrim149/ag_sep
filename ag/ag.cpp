@@ -191,7 +191,6 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 	return pesos;
 }
 
-void 
 
 
 int main(){
