@@ -91,19 +91,36 @@ int main(){
 	/*for(int i=0; i< qtd_genes; i++)
 		cout << "gene" << i+1 << ": " << cromossomo[i] << endl;
 	*/
+	int numero_cromossomos = 2;
 	int tamanho_pai=4;
+	
+	int pop[numero_cromossomos][tamanho_pai];
+	
 	int pai_1[tamanho_pai];
 	int pai_2[tamanho_pai];
 	
-	pai_1[0]=0;
-	pai_1[1]=1;
-	pai_1[2]=1;
-	pai_1[3]=1;
+	//inicialização de teste
+
 	
-	pai_2[0]=0;
-	pai_2[1]=1;
-	pai_2[2]=0;
-	pai_2[3]=0;
+	pop[0][0]=0;
+	pop[0][1]=1;
+	pop[0][2]=1;
+	pop[0][3]=1;
+	
+	pop[1][0]=0;
+	pop[1][1]=1;
+	pop[1][2]=0;
+	pop[1][3]=0;
+	
+	pai_1[0]=pop[0][0];
+	pai_1[1]=pop[0][1];
+	pai_1[2]=pop[0][2];
+	pai_1[3]=pop[0][3];
+	
+	pai_2[0]=pop[1][0];
+	pai_2[1]=pop[1][1];
+	pai_2[2]=pop[1][2];
+	pai_2[3]=pop[1][3];
 	
 	cout << "pai 1 ";
 	for(int i=0; i< tamanho_pai; i++)
@@ -113,8 +130,12 @@ int main(){
 	for(int i=0; i< tamanho_pai; i++)
 		cout << " " << pai_2[i];
 	
+	
+	//testando crossover
 	crossover(pai_1,tamanho_pai,pai_2,tamanho_pai);	
-	//mutacao(cromossomo,qtd_genes);
+	//mutacao(pai_1,tamanho_pai);
+	//mutacao(pai_2,tamanho_pai);
+	
 	cout << "depois" << endl;
 	/*for(int i=0; i< qtd_genes; i++)
 		cout << "gene" << i+1 << ": " << cromossomo[i] << endl;
