@@ -263,8 +263,8 @@ int main(){
 	srand(time(NULL));		
 
 //VALORES DEFINIDOS PARA INICIALIZAÇÃO
-	int numero_cromossomos = 10;//numero de individuos
-	int tamanho_pai=10;//numero de genes
+	int numero_cromossomos = 4;//numero de individuos
+	int tamanho_pai=5;//numero de genes
 	//int pop[numero_cromossomos][tamanho_pai]; inicializando a matriz de elementos
 	int **pop;
 	pop = new int *[numero_cromossomos];
