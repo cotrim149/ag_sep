@@ -1,10 +1,29 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-
+#include <fstream>
 #define qtd_genes 5
 
 using namespace std;
+
+int infectadosAtual(int ** pop, int numero_cromossomos, int tamanho_pai)
+{
+	int infectados, n;
+	infectados = 0;
+	
+	for(int i=0; i <numero_cromossomos;i++){
+		n = 0;	
+		for(int j=0;j<tamanho_pai;j++){
+			n += pop[i][j];
+		}
+		if ( n > (tamanho_pai / 2) )
+			infectados += 1;
+		
+	}
+	
+	return infectados;
+
+}
 
 void imprime_matriz(int ** matriz_pop , int numero_cromossomos, int tamanho_pai){
 
@@ -45,6 +64,15 @@ void copia_matriz(int ** pop1, int ** pop2, int numero_cromossomos, int tamanho_
 
 
 //retorna um valor aleatorio entre 0 e o denominador
+
+void copiaVetores( int * vetor, int * original, int tamanho)
+{
+	for(int i = 0; i < tamanho; i++)
+	{
+		vetor[i] = original[i];
+	}
+
+}
 
 int valor_aleatorio(int denominador){
 	int valor = rand();
@@ -301,8 +329,24 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
 		//cout<<endl<< "<><><><><><>  "<< i;
 		
+		int *filho_a;
+		filho_a = new int[tamanho_pai];
+		int *filho_b;
+		filho_b = new int[tamanho_pai];
 		
-		crossover(pop[selected_a], tamanho_pai,pop[selected_b],tamanho_pai);
+		//int filho_a[tamanho_pai];
+		//int filho_b[tamanho_pai];
+		
+		copiaVetores(filho_a, pop2[selected_a], tamanho_pai);
+		copiaVetores(filho_b, pop2[selected_b], tamanho_pai);
+		
+		crossover(filho_a, tamanho_pai,filho_b,tamanho_pai);
+		
+		//Alterando pop
+		
+		pop[i] = filho_a;
+		pop[i+1] = filho_b;
+		
 		cout<<endl;
 		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 		cout<<endl;
@@ -322,17 +366,20 @@ int main(){
 	srand(time(NULL));		
 
 //VALORES DEFINIDOS PARA INICIALIZAÇÃO
-	int numero_cromossomos = 4;//numero de individuos
+	int numero_cromossomos = 8;//numero de individuos
 	int tamanho_pai=4;//numero de genes
-	int qtd_infect = 2; // adicionar FLAG para infecção total ou randomica
+	int qtd_infect = 5;
+	ofstream file;
+	file.open ("geracao_infect.txt");	
+	int **pop;
+	pop = new int *[numero_cromossomos];
+	for(int i = 0; i <numero_cromossomos; i++)
+    pop[i] = new int[tamanho_pai];// adicionar FLAG para infecção total ou randomica
 	//int pop[numero_cromossomos][tamanho_pai]; inicializando a matriz de elementos
 	//cout<< "Digite a quantidade de cromossomos: "<<endl; cin>> numero_cromossomos;
 	//cout<< "Digite a quantidade de genes: "<<endl; cin>> tamanho_pai;
 	//cout<< "Digite a quantidade de infectados: "<<endl; cin>> qtd_infect;
-	int **pop;
-	pop = new int *[numero_cromossomos];
-	for(int i = 0; i <numero_cromossomos; i++)
-    pop[i] = new int[tamanho_pai];	
+	
 
 
 	//int pai_1[tamanho_pai];
@@ -358,8 +405,12 @@ int main(){
 	int * fitness;
 	float * pesos;	
 	int geracao = 0;
+	int geracao_max = 5;
+	
+	
+	
 	//inicia o loop
-	while(geracao!=1){
+	while(geracao!=geracao_max){
 	cout<<"Fitness Calculados: "<<endl;
 	fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
 	imprime_vetor(fitness, numero_cromossomos);
@@ -376,11 +427,15 @@ int main(){
 	
 	imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 	
+	cout << "Geracao: "<< geracao << endl;
+	cout << "Quantidade de infectados: " << infectadosAtual(pop, numero_cromossomos, tamanho_pai) << endl;
+	
+	file<<geracao<<" "<< infectadosAtual(pop, numero_cromossomos, tamanho_pai)<<"\n";
 	geracao++;
 	}//FIM DO LOOP PRINCIPAL 
 	
 	
-	
+	file.close();
 	free(pesos);
 	free(fitness);
 	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
