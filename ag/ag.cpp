@@ -191,6 +191,59 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 	return pesos;
 }
 
+void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
+	int aux=0;
+	int selected_a=-1 , selected_b=-1;
+	int first=0;
+	int next = 0;
+	int soma = soma_vetor(fitness,numero_cromossomos);
+	
+	
+	for(int i=0;i<(numero_cromossomos/2);i++){
+		aux=rand()%soma;
+		//cout<<endl <<"========="<< aux;
+		first = 0;
+		next = 0;
+		
+		for(int j=0;j<numero_cromossomos;j++){
+			next +=fitness[j];
+			//cout<<endl<<"-------------"<<next;
+			if(aux>=first && aux<next) selected_a = j;
+			first = next;			
+		}
+		cout<< endl<< endl<< "1 - >>>>>>>>>>>>>>>  "<< selected_a<<endl;
+		
+		
+		aux=rand()%soma;
+		//cout<<endl <<"========="<< aux;
+		first = 0;
+		next = 0;
+		
+		for(int j=0;j<numero_cromossomos;j++){
+			next +=fitness[j];
+			//cout<<endl<<"-------------"<<next;
+			if(aux>=first && aux<next) selected_b = j;
+			first = next;			
+		}
+		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
+		//selected_a=9;
+		//selected_b=9;
+		if(selected_a == selected_b) cout<< endl <<"AAAAAAAAAAAAAAAAAAAAAAAAAA";
+		//criterio de desempate
+		if(selected_a == selected_b && selected_a>0 ) selected_a -=1;
+		if(selected_a == selected_b && selected_a<(numero_cromossomos-1) ) selected_a +=1;
+		if(selected_a == selected_b && selected_a==(numero_cromossomos-1)) selected_a -=1;
+		if(selected_a == selected_b && selected_a==0) selected_a +=1;
+		
+		//cout<<endl<< "<><><><><><>  "<< selected_a<<"][][][][][][][][]"<< selected_b;
+		
+	}
+	
+		
+		
+	
+
+}
 
 
 int main(){
@@ -238,7 +291,17 @@ int main(){
 	
 	imprime_vetorf(pesos,numero_cromossomos);
 	
+	//a soma TEM que dar 1, ou seja 100%
 	cout<< soma_vetorf(pesos,numero_cromossomos);
+	
+	
+	seleciona_cruza(pop,fitness,numero_cromossomos);
+	
 return 0;
 }
+
+
+
+
+
 
