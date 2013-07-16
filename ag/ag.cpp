@@ -302,7 +302,7 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		//cout<<endl<< "<><><><><><>  "<< i;
 		
 		
-		crossover(vetorsinho[selected_a], tamanho_pai,vetorsinhob[selected_b],tamanho_pai);
+		crossover(pop[selected_a], tamanho_pai,pop[selected_b],tamanho_pai);
 		cout<<endl;
 		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 		cout<<endl;
