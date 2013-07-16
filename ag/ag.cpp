@@ -13,6 +13,18 @@ int valor_aleatorio(int denominador){
 	
 	return valor%denominador;
 }
+void imprime_matriz(int ** matriz_pop , int numero_cromossomos, int tamanho_pai){
+
+	for(int i=0; i <numero_cromossomos;i++){
+		cout<< "CROMOSSOMO"<< "<"<< i <<"> = ";
+		for(int j=0;j<tamanho_pai;j++){
+			cout<< matriz_pop[i][j] ;
+		}
+		cout<< endl;
+	}
+
+
+}
 void imprime_vetor(int * vetor, int tamanho){
 	cout<< "Imprimindo vetor: "<< endl;
 	for(int i=0; i<tamanho;i++){
@@ -81,7 +93,7 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 	int ponto_cross_pai_1 = valor_aleatorio(tamanho_pai_1);
 	int ponto_cross_pai_2 = valor_aleatorio(tamanho_pai_2);
 	cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
-	cout<< endl <<"ponto cross pai 2" << ponto_cross_pai_2<<endl;
+	cout<< endl <<"ponto cross pai 2>> " << ponto_cross_pai_2<<endl;
 	
 	
 	int vetor_1[ponto_cross_pai_1];//funciona como um buffer para nao perdermos informação do PAI_1
@@ -199,7 +211,7 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 	int soma = soma_vetor(fitness,numero_cromossomos);
 	
 	
-	for(int i=0;i<(numero_cromossomos/2);i++){
+	for(int i=0;i<(numero_cromossomos);i+=2){
 		aux=rand()%soma;
 		//cout<<endl <<"========="<< aux;
 		first = 0;
@@ -226,8 +238,7 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 			first = next;			
 		}
 		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
-		//selected_a=9;
-		//selected_b=9;
+
 		if(selected_a == selected_b) cout<< endl <<"AAAAAAAAAAAAAAAAAAAAAAAAAA";
 		//criterio de desempate
 		if(selected_a == selected_b && selected_a>0 ) selected_a -=1;
@@ -235,11 +246,12 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 		if(selected_a == selected_b && selected_a==(numero_cromossomos-1)) selected_a -=1;
 		if(selected_a == selected_b && selected_a==0) selected_a +=1;
 		
-		//cout<<endl<< "<><><><><><>  "<< selected_a<<"][][][][][][][][]"<< selected_b;
+		cout<<endl<< "<><><><><><>  "<< i;
+		crossover(pop[i], 4,pop[i+1],4);
 		
 	}
 	
-		
+		//cout<< endl<< endl<< ">>>>>>>>>>>>>>>  "<< selected_b<<endl;
 		
 	
 
@@ -297,6 +309,11 @@ int main(){
 	
 	seleciona_cruza(pop,fitness,numero_cromossomos);
 	
+	imprime_matriz(pop,numero_cromossomos,tamanho_pai);
+	free(fitness);
+	free(pesos);
+	//FIM DO LOOP PRINCIPAL 
+	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
 return 0;
 }
 
