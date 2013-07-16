@@ -6,13 +6,6 @@
 
 using namespace std;
 
-
-//retorna um valor aleatorio entre 0 e o denominador
-int valor_aleatorio(int denominador){
-	int valor = rand();
-	
-	return valor%denominador;
-}
 void imprime_matriz(int ** matriz_pop , int numero_cromossomos, int tamanho_pai){
 
 	for(int i=0; i <numero_cromossomos;i++){
@@ -25,15 +18,49 @@ void imprime_matriz(int ** matriz_pop , int numero_cromossomos, int tamanho_pai)
 
 
 }
+
+
+//copia a pop1 para pop2, apenas os valores e nao a referencia
+void copia_matriz(int ** pop1, int ** pop2, int numero_cromossomos, int tamanho_pai){
+	
+	for(int i=0; i <numero_cromossomos;i++){
+		//cout<< "CROMOSSOMO"<< "<"<< i <<"> = ";
+		for(int j=0;j<tamanho_pai;j++){
+			pop2[i][j] = pop1[i][j];
+			
+		}
+		cout<< endl;
+	}
+	
+	
+	
+	//cout<<"#######################"<<endl;
+	//imprime_matriz(pop1 , numero_cromossomos, tamanho_pai);
+	//cout<<"-----------------------"<<endl;
+	//imprime_matriz(pop2 , numero_cromossomos, tamanho_pai);
+	//cout<<"#######################"<<endl;
+
+}
+
+
+
+//retorna um valor aleatorio entre 0 e o denominador
+
+int valor_aleatorio(int denominador){
+	int valor = rand();
+	
+	return valor%denominador;
+}
+
 void imprime_vetor(int * vetor, int tamanho){
-	cout<< "Imprimindo vetor: "<< endl;
+	//cout<< "Imprimindo vetor: "<< endl;
 	for(int i=0; i<tamanho;i++){
 		cout<<"vetor["<<i<<"]= "<< vetor[i]<<endl;
 	}
 
 }
 void imprime_vetorf(float * vetor, int tamanho){
-	cout<< "Imprimindo vetor: "<< endl;
+	//cout<< "Imprimindo vetor: "<< endl;
 	for(int i=0; i<tamanho;i++){
 		cout<<"vetor["<<i<<"]= "<< vetor[i]<<endl;
 	}
@@ -93,7 +120,7 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 	int ponto_cross_pai_1 = valor_aleatorio(tamanho_pai_1);
 	int ponto_cross_pai_2 = valor_aleatorio(tamanho_pai_2);
 	cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
-	cout<< endl <<"ponto cross pai 2>> " << ponto_cross_pai_2<<endl;
+	//cout<< endl <<"ponto cross pai 2>> " << ponto_cross_pai_2<<endl;
 	
 	
 	int vetor_1[ponto_cross_pai_1];//funciona como um buffer para nao perdermos informação do PAI_1
@@ -103,9 +130,10 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 	
 	
 	//BUG corrigido
+	cout<< "GENES TROCADOS"<<endl;
 	for(int j=0; j <= ponto_cross_pai_1;j++){
 		vetor_1[j]= pai_1[j];
-		cout<< "PONTO CROSS"<<vetor_1[j]<< endl;
+		cout<<vetor_1[j]<< " ";
 	}
 	
 	int maior_ponto_cross;
@@ -129,33 +157,33 @@ void inicia_populacao(int  ** matriz_pop , int numero_cromossomos, int tamanho_p
 	numero_cromossomos -=1;
 	cout<<endl;
 	for(int i=0; i <=numero_cromossomos;i++){
-		cout<< "INICIANDO população: "<< "<"<< i <<"> = "<<endl;
+		//cout<< "INICIANDO população: "<< "<"<< i <<"> = "<<endl;
 		for(int j=0;j<tamanho_pai;j++){
 			matriz_pop[i][j]=0;
-			cout<< matriz_pop[i][j] ;
+			//cout<< matriz_pop[i][j] ;
 		}
 		cout<< endl;
 	}
 	
 	
 	//inicializa com a quantidade de infectados totalmente
+	cout<< "CROMOSSOMOS INFECTADOS>> ";
 	for(int i=0; i<= (qtd_infect-1); i++){
 		int rand = valor_aleatorio(numero_cromossomos+1);
 				for(int j=0;j<tamanho_pai;j++){
 				matriz_pop[rand][j] = valor_aleatorio(2);
 				//matriz_pop[rand][j] = 1; //para uma infecção total do individuo
 				}
-				cout<< "INFECÇÃo>> "<<rand<<endl;
-
-			
+				cout<<rand<<"  ";
 	}
+	cout<<endl;
 }
 
 //apenas imprime a população
 void imprime_populacao(int ** matriz_pop,int numero_cromossomos, int tamanho_pai){
 	numero_cromossomos -=1;
 	for(int i=0; i <=numero_cromossomos;i++){
-		cout<< "INICIANDO população: "<< "<"<< i <<"> = "<<endl;
+		cout<< "CROMOSSOMO"<< "<"<< i <<"> = ";
 		for(int j=0;j<tamanho_pai;j++){
 			cout<< matriz_pop[i][j] ;
 		}
@@ -182,10 +210,10 @@ int * calcula_fitness(int ** matriz_pop,int numero_cromossomos, int tamanho_pai)
 		if(notas[i]==0) notas[i]=1;// para que quem nao tenha sintomas tenha chance de ser selecionado
 	}
 	
-	imprime_vetor(notas,numero_cromossomos);
+	//imprime_vetor(notas,numero_cromossomos);
 	
 	
-	cout <<endl<< "PASSOU"<<endl;
+	//cout <<endl<< "PASSOU"<<endl;
 	
 	return notas;
 }
@@ -193,7 +221,7 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 
 	float * pesos = new float[numero_cromossomos];
 	float soma_fitness = soma_vetor(fitness,numero_cromossomos);
-	cout<< soma_fitness;
+	cout<<"Soma dos valores de fitness: "<<soma_fitness<<endl;
 	for(int i=0; i<numero_cromossomos;i++){
 		pesos[i]= ( 1 * fitness[i] )/soma_fitness;
 		cout<<pesos[i]<<endl;
@@ -203,12 +231,35 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 	return pesos;
 }
 
-void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
+//colocar e corrigir as matrizes, pois eles está utilizando a mesma e perdendo a referencia anterior ,
+//quando na verdade deve se fazer uma copia antes de realizar as operações para que os valores do inicio nao sejam perdidos
+void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tamanho_pai){
 	int aux=0;
 	int selected_a=-1 , selected_b=-1;
 	int first=0;
 	int next = 0;
 	int soma = soma_vetor(fitness,numero_cromossomos);
+	
+	//criando matriz temporaria
+	int **pop2;
+	pop2 = new int *[numero_cromossomos];
+	for(int i = 0; i <numero_cromossomos; i++)
+    pop2[i] = new int[tamanho_pai];	
+	
+	
+	//cout<<"THAIANE FERREIRA BRAGA OWNA TODO MUNDO NO LOL"<<endl;
+	copia_matriz(pop,pop2,numero_cromossomos,tamanho_pai);
+	//pop[0][0]=126543;
+	//pop2[3][0]=126543;
+	
+	
+	//cout<<"#######################"<<endl;
+	//imprime_matriz(pop , numero_cromossomos, tamanho_pai);
+	//cout<<"-----------------------"<<endl;
+	//imprime_matriz(pop2 , numero_cromossomos, tamanho_pai);
+	//cout<<"#######################"<<endl;
+	
+	
 	
 	
 	for(int i=0;i<(numero_cromossomos);i+=2){
@@ -223,7 +274,7 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 			if(aux>=first && aux<next) selected_a = j;
 			first = next;			
 		}
-		cout<< endl<< endl<< "1 - >>>>>>>>>>>>>>>  "<< selected_a<<endl;
+		
 		
 		
 		aux=rand()%soma;
@@ -237,18 +288,24 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 			if(aux>=first && aux<next) selected_b = j;
 			first = next;			
 		}
-		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
+		
 
-		if(selected_a == selected_b) cout<< endl <<"AAAAAAAAAAAAAAAAAAAAAAAAAA";
+		//if(selected_a == selected_b) cout<< endl <<"AAAAAAAAAAAAAAAAAAAAAAAAAA";
 		//criterio de desempate
 		if(selected_a == selected_b && selected_a>0 ) selected_a -=1;
 		if(selected_a == selected_b && selected_a<(numero_cromossomos-1) ) selected_a +=1;
 		if(selected_a == selected_b && selected_a==(numero_cromossomos-1)) selected_a -=1;
 		if(selected_a == selected_b && selected_a==0) selected_a +=1;
 		
-		cout<<endl<< "<><><><><><>  "<< i;
-		crossover(pop[i], 4,pop[i+1],4);
+		cout<< endl<< endl<< "1 - >>>>>>>>>>>>>>>  "<< selected_a<<endl;
+		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
+		//cout<<endl<< "<><><><><><>  "<< i;
 		
+		
+		crossover(vetorsinho[selected_a], tamanho_pai,vetorsinhob[selected_b],tamanho_pai);
+		cout<<endl;
+		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
+		cout<<endl;
 	}
 	
 		//cout<< endl<< endl<< ">>>>>>>>>>>>>>>  "<< selected_b<<endl;
@@ -258,17 +315,23 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos){
 }
 
 
+
+
 int main(){
 	system("cls");
 	srand(time(NULL));		
 
 //VALORES DEFINIDOS PARA INICIALIZAÇÃO
 	int numero_cromossomos = 4;//numero de individuos
-	int tamanho_pai=5;//numero de genes
+	int tamanho_pai=4;//numero de genes
+	int qtd_infect = 2; // adicionar FLAG para infecção total ou randomica
 	//int pop[numero_cromossomos][tamanho_pai]; inicializando a matriz de elementos
+	//cout<< "Digite a quantidade de cromossomos: "<<endl; cin>> numero_cromossomos;
+	//cout<< "Digite a quantidade de genes: "<<endl; cin>> tamanho_pai;
+	//cout<< "Digite a quantidade de infectados: "<<endl; cin>> qtd_infect;
 	int **pop;
 	pop = new int *[numero_cromossomos];
-	for(int i = 0; i <10; i++)
+	for(int i = 0; i <numero_cromossomos; i++)
     pop[i] = new int[tamanho_pai];	
 
 
@@ -288,31 +351,38 @@ int main(){
 	
 	
 	
-	inicia_populacao(pop,numero_cromossomos,tamanho_pai,3);
+	inicia_populacao(pop,numero_cromossomos,tamanho_pai,qtd_infect);
+	cout<<"Populacao Inicial: "<<endl;
 	imprime_populacao(pop,numero_cromossomos,tamanho_pai);
-	
-		
-	//inicia o loop
-	int * fitness;
-	float * pesos;
 
+	int * fitness;
+	float * pesos;	
+	int geracao = 0;
+	//inicia o loop
+	while(geracao!=1){
+	cout<<"Fitness Calculados: "<<endl;
 	fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
 	imprime_vetor(fitness, numero_cromossomos);
 	
 	pesos = calcula_pesos(fitness,numero_cromossomos);
-	
+	cout<<"Pesos Calculados: "<<endl;
 	imprime_vetorf(pesos,numero_cromossomos);
 	
-	//a soma TEM que dar 1, ou seja 100%
-	cout<< soma_vetorf(pesos,numero_cromossomos);
+	//a soma TEM que dar 1, ou seja 100%	d .d dddd
+	cout<<"Soma dos pesos: " <<soma_vetorf(pesos,numero_cromossomos)<<endl;
 	
 	
-	seleciona_cruza(pop,fitness,numero_cromossomos);
+	seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai);
 	
 	imprime_matriz(pop,numero_cromossomos,tamanho_pai);
-	free(fitness);
+	
+	geracao++;
+	}//FIM DO LOOP PRINCIPAL 
+	
+	
+	
 	free(pesos);
-	//FIM DO LOOP PRINCIPAL 
+	free(fitness);
 	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
 return 0;
 }

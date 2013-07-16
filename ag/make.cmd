@@ -1,1 +1,1 @@
-g++ -Wall ag.cpp -o prog.exe
+g++ -Wall -pedantic -ansi ag.cpp -o prog.exe
