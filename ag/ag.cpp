@@ -425,7 +425,7 @@ int main(){
 	
 	
 	//inicia o loop
-	while((geracao!=geracao_max) || (total_infectados!=numero_cromossomos)){
+	while((geracao!=geracao_max)){
 
 		cout<<"Fitness Calculados: "<<endl;
 		fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
@@ -446,10 +446,13 @@ int main(){
 		cout << "Geracao: "<< geracao << endl;
 		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
 		cout << "Quantidade de infectados: " << total_infectados << endl;
-	
+					
 		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
 		file<<geracao<<" "<<total_infectados <<"\n";
 		geracao++;
+
+		if(total_infectados==numero_cromossomos)
+			break;
 
 	}//FIM DO LOOP PRINCIPAL 
 	file.close();
