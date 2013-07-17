@@ -64,7 +64,6 @@ void copia_matriz(int ** pop1, int ** pop2, int numero_cromossomos, int tamanho_
 
 
 
-//retorna um valor aleatorio entre 0 e o denominador
 
 void copiaVetores( int * vetor, int * original, int tamanho)
 {
@@ -74,6 +73,8 @@ void copiaVetores( int * vetor, int * original, int tamanho)
 	}
 
 }
+
+//retorna um valor aleatorio entre 0 e o denominador
 
 int valor_aleatorio(int denominador){
 	int valor = rand();
@@ -368,7 +369,11 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 
 }
 
-
+void plotGraphic(char gnucommand[]){
+	char syscommand[2048];
+	sprintf(syscommand, "echo \"%s\" | gnuplot -persist", gnucommand);
+	system(syscommand);
+}
 
 
 int main(){
@@ -415,7 +420,7 @@ int main(){
 	int * fitness;
 	float * pesos;
 	int geracao = 0;
-	int geracao_max = 5;
+	int geracao_max = 50;
 	int total_infectados=0;
 	
 	
@@ -433,7 +438,7 @@ int main(){
 		//a soma TEM que dar 1, ou seja 100%	d .d dddd
 		cout<<"Soma dos pesos: " <<soma_vetorf(pesos,numero_cromossomos)<<endl;
 	
-	
+
 		seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai);
 		
 		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
@@ -446,9 +451,11 @@ int main(){
 		geracao++;
 
 	}//FIM DO LOOP PRINCIPAL 
-	
-	
 	file.close();
+	
+	char instrucao[] = "geracao_infect= 'geracao_infect.txt'; plot geracao_infect with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
+	
+	plotGraphic(instrucao);	
 	free(pesos);
 	free(fitness);
 	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
