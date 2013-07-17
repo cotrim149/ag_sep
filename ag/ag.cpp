@@ -466,7 +466,7 @@ int main(){
 	file_mutation.close();
 	
 	char geracao_infectado[] = "geracao_infect= 'geracao_infect.txt'; plot geracao_infect with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
-	char geracao_mutacoes[] = "geracao_mutacao= 'geracao_Nmutacao.txt'; plot geracao_mutacao with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
+	char geracao_mutacoes[] = "geracao_mutacao= 'geracao_Nmutacao.txt'; plot geracao_mutacao with lines; set terminal png; set output 							'mutacao_por_geracao.png';replot;";
 	plotGraphic(geracao_infectado);	
 	plotGraphic(geracao_mutacoes);	
 	free(pesos);
