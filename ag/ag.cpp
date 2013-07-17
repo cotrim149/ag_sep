@@ -425,7 +425,7 @@ int main(){
 	
 	
 	//inicia o loop
-	while((geracao!=geracao_max) ){
+	while((geracao!=geracao_max) || (total_infectados!=numero_cromossomos)){
 
 		cout<<"Fitness Calculados: "<<endl;
 		fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
