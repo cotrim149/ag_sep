@@ -263,7 +263,7 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 
 //colocar e corrigir as matrizes, pois eles está utilizando a mesma e perdendo a referencia anterior ,
 //quando na verdade deve se fazer uma copia antes de realizar as operações para que os valores do inicio nao sejam perdidos
-void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tamanho_pai){
+void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tamanho_pai,int* total_mutacoes){
 	int aux=0;
 	int selected_a=-1 , selected_b=-1;
 	int first=0;
@@ -274,10 +274,9 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 	int **pop2;
 	pop2 = new int *[numero_cromossomos];
 	for(int i = 0; i <numero_cromossomos; i++)
-    pop2[i] = new int[tamanho_pai];	
+    	pop2[i] = new int[tamanho_pai];	
 	
 	
-	//cout<<"THAIANE FERREIRA BRAGA OWNA TODO MUNDO NO LOL"<<endl;
 	copia_matriz(pop,pop2,numero_cromossomos,tamanho_pai);
 	//pop[0][0]=126543;
 	//pop2[3][0]=126543;
@@ -301,7 +300,9 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		for(int j=0;j<numero_cromossomos;j++){
 			next +=fitness[j];
 			//cout<<endl<<"-------------"<<next;
-			if(aux>=first && aux<next) selected_a = j;
+			if(aux>=first && aux<next) 
+				selected_a = j;
+			
 			first = next;			
 		}
 		
@@ -346,6 +347,7 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		if((rand()%101)==5){
 			mutacao(filho_a, tamanho_pai);
 			mutacao(filho_b, tamanho_pai);
+			total_mutacoes[0]++;
 			//cout<<"||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"<<endl;
 		}else
 			crossover(filho_a, tamanho_pai,filho_b,tamanho_pai);
@@ -385,7 +387,9 @@ int main(){
 	int tamanho_pai=4;//numero de genes
 	int qtd_infect = 5;
 	ofstream file;
+	ofstream file_mutation;
 	file.open ("geracao_infect.txt");	
+	file_mutation.open ("geracao_Nmutacao.txt");
 	int **pop;
 	pop = new int *[numero_cromossomos];
 	for(int i = 0; i <numero_cromossomos; i++)
@@ -422,7 +426,8 @@ int main(){
 	int geracao = 0;
 	int geracao_max = 50;
 	int total_infectados=0;
-	
+	int * total_mutacoes = new int[1];
+	total_mutacoes[0]=0;
 	
 	//inicia o loop
 	while((geracao!=geracao_max)){
@@ -439,16 +444,18 @@ int main(){
 		cout<<"Soma dos pesos: " <<soma_vetorf(pesos,numero_cromossomos)<<endl;
 	
 
-		seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai);
+		seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai,total_mutacoes);
 		
 		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 	
 		cout << "Geracao: "<< geracao << endl;
 		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
 		cout << "Quantidade de infectados: " << total_infectados << endl;
-					
+		
+		cout << "Quantidade de mutacoes: " << total_mutacoes[0] << endl;					
 		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
 		file<<geracao<<" "<<total_infectados <<"\n";
+		file_mutation<<geracao<<" "<<total_mutacoes[0] << "\n";
 		geracao++;
 
 		if(total_infectados==numero_cromossomos)
@@ -456,10 +463,12 @@ int main(){
 
 	}//FIM DO LOOP PRINCIPAL 
 	file.close();
+	file_mutation.close();
 	
-	char instrucao[] = "geracao_infect= 'geracao_infect.txt'; plot geracao_infect with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
-	
-	plotGraphic(instrucao);	
+	char geracao_infectado[] = "geracao_infect= 'geracao_infect.txt'; plot geracao_infect with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
+	char geracao_mutacoes[] = "geracao_mutacao= 'geracao_Nmutacao.txt'; plot geracao_mutacao with lines; set terminal png; set output 							'infectados_por_geracao.png';replot;";
+	plotGraphic(geracao_infectado);	
+	plotGraphic(geracao_mutacoes);	
 	free(pesos);
 	free(fitness);
 	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
