@@ -425,7 +425,7 @@ int main(){
 	
 	
 	//inicia o loop
-	while(geracao!=geracao_max){
+	while((geracao!=geracao_max) ){
 
 		cout<<"Fitness Calculados: "<<endl;
 		fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
@@ -444,7 +444,8 @@ int main(){
 		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 	
 		cout << "Geracao: "<< geracao << endl;
-		cout << "Quantidade de infectados: " << infectadosAtual(pop, numero_cromossomos, tamanho_pai) << endl;
+		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
+		cout << "Quantidade de infectados: " << total_infectados << endl;
 	
 		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
 		file<<geracao<<" "<<total_infectados <<"\n";
