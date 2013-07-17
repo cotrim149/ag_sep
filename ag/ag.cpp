@@ -3,6 +3,7 @@
 #include <time.h>
 #include <fstream>
 #define qtd_genes 5
+#define taxa_mutacao 5
 
 using namespace std;
 
@@ -26,7 +27,7 @@ int infectadosAtual(int ** pop, int numero_cromossomos, int tamanho_pai)
 }
 
 void imprime_matriz(int ** matriz_pop , int numero_cromossomos, int tamanho_pai){
-
+	cout<<endl;
 	for(int i=0; i <numero_cromossomos;i++){
 		cout<< "CROMOSSOMO"<< "<"<< i <<"> = ";
 		for(int j=0;j<tamanho_pai;j++){
@@ -48,7 +49,7 @@ void copia_matriz(int ** pop1, int ** pop2, int numero_cromossomos, int tamanho_
 			pop2[i][j] = pop1[i][j];
 			
 		}
-		cout<< endl;
+		//cout<< endl;
 	}
 	
 	
@@ -147,7 +148,7 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 
 	int ponto_cross_pai_1 = valor_aleatorio(tamanho_pai_1);
 	int ponto_cross_pai_2 = valor_aleatorio(tamanho_pai_2);
-	cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
+	//cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
 	//cout<< endl <<"ponto cross pai 2>> " << ponto_cross_pai_2<<endl;
 	
 	
@@ -158,7 +159,7 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 	
 	
 	//BUG corrigido
-	cout<< "GENES TROCADOS"<<endl;
+	//cout<< "GENES TROCADOS"<<endl;
 	for(int j=0; j <= ponto_cross_pai_1;j++){
 		vetor_1[j]= pai_1[j];
 		cout<<vetor_1[j]<< " ";
@@ -252,7 +253,7 @@ float *calcula_pesos(int * fitness , int numero_cromossomos){
 	cout<<"Soma dos valores de fitness: "<<soma_fitness<<endl;
 	for(int i=0; i<numero_cromossomos;i++){
 		pesos[i]= ( 1 * fitness[i] )/soma_fitness;
-		cout<<pesos[i]<<endl;
+		//cout<<pesos[i]<<endl;
 	}
 	
 	
@@ -325,8 +326,8 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		if(selected_a == selected_b && selected_a==(numero_cromossomos-1)) selected_a -=1;
 		if(selected_a == selected_b && selected_a==0) selected_a +=1;
 		
-		cout<< endl<< endl<< "1 - >>>>>>>>>>>>>>>  "<< selected_a<<endl;
-		cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
+		//cout<< endl<< endl<< "1 - >>>>>>>>>>>>>>>  "<< selected_a<<endl;
+		//cout<< endl<< endl<< "2 - >>>>>>>>>>>>>>>  "<< selected_b<<endl;
 		//cout<<endl<< "<><><><><><>  "<< i;
 		
 		int *filho_a;
@@ -340,16 +341,25 @@ void seleciona_cruza(int ** pop , int * fitness, int numero_cromossomos, int tam
 		copiaVetores(filho_a, pop2[selected_a], tamanho_pai);
 		copiaVetores(filho_b, pop2[selected_b], tamanho_pai);
 		
-		crossover(filho_a, tamanho_pai,filho_b,tamanho_pai);
+
+		if((rand()%101)==5){
+			mutacao(filho_a, tamanho_pai);
+			mutacao(filho_b, tamanho_pai);
+			//cout<<"||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"<<endl;
+		}else
+			crossover(filho_a, tamanho_pai,filho_b,tamanho_pai);
 		
 		//Alterando pop
 		
 		pop[i] = filho_a;
 		pop[i+1] = filho_b;
 		
-		cout<<endl;
-		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
-		cout<<endl;
+		//cout<<endl;
+		//imprime_matriz(pop,numero_cromossomos,tamanho_pai);
+		//cout<<endl;
+
+
+
 	}
 	
 		//cout<< endl<< endl<< ">>>>>>>>>>>>>>>  "<< selected_b<<endl;
@@ -403,35 +413,38 @@ int main(){
 	imprime_populacao(pop,numero_cromossomos,tamanho_pai);
 
 	int * fitness;
-	float * pesos;	
+	float * pesos;
 	int geracao = 0;
 	int geracao_max = 5;
-	
+	int total_infectados=0;
 	
 	
 	//inicia o loop
 	while(geracao!=geracao_max){
-	cout<<"Fitness Calculados: "<<endl;
-	fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
-	imprime_vetor(fitness, numero_cromossomos);
+
+		cout<<"Fitness Calculados: "<<endl;
+		fitness = calcula_fitness(pop,numero_cromossomos,tamanho_pai);
+		imprime_vetor(fitness, numero_cromossomos);
 	
-	pesos = calcula_pesos(fitness,numero_cromossomos);
-	cout<<"Pesos Calculados: "<<endl;
-	imprime_vetorf(pesos,numero_cromossomos);
+		pesos = calcula_pesos(fitness,numero_cromossomos);
+		cout<<"Pesos Calculados: "<<endl;
+		imprime_vetorf(pesos,numero_cromossomos);
 	
-	//a soma TEM que dar 1, ou seja 100%	d .d dddd
-	cout<<"Soma dos pesos: " <<soma_vetorf(pesos,numero_cromossomos)<<endl;
+		//a soma TEM que dar 1, ou seja 100%	d .d dddd
+		cout<<"Soma dos pesos: " <<soma_vetorf(pesos,numero_cromossomos)<<endl;
 	
 	
-	seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai);
+		seleciona_cruza(pop,fitness,numero_cromossomos, tamanho_pai);
+		
+		imprime_matriz(pop,numero_cromossomos,tamanho_pai);
 	
-	imprime_matriz(pop,numero_cromossomos,tamanho_pai);
+		cout << "Geracao: "<< geracao << endl;
+		cout << "Quantidade de infectados: " << infectadosAtual(pop, numero_cromossomos, tamanho_pai) << endl;
 	
-	cout << "Geracao: "<< geracao << endl;
-	cout << "Quantidade de infectados: " << infectadosAtual(pop, numero_cromossomos, tamanho_pai) << endl;
-	
-	file<<geracao<<" "<< infectadosAtual(pop, numero_cromossomos, tamanho_pai)<<"\n";
-	geracao++;
+		total_infectados = infectadosAtual(pop, numero_cromossomos, tamanho_pai);
+		file<<geracao<<" "<<total_infectados <<"\n";
+		geracao++;
+
 	}//FIM DO LOOP PRINCIPAL 
 	
 	
