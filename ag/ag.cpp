@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
-#define qtd_genes 5
+#include <math.h>
 #define taxa_mutacao 5
 
 using namespace std;
@@ -152,7 +152,6 @@ void crossover(int* pai_1,int tamanho_pai_1, int* pai_2, int tamanho_pai_2){
 	//cout<< endl<<"ponto cross pai 1>>" << ponto_cross_pai_1<<endl;
 	//cout<< endl <<"ponto cross pai 2>> " << ponto_cross_pai_2<<endl;
 	
-	
 	int vetor_1[ponto_cross_pai_1];//funciona como um buffer para nao perdermos informação do PAI_1
 	//int vetor_2[ponto_cross_pai_2];
 	
@@ -230,13 +229,16 @@ int * calcula_fitness(int ** matriz_pop,int numero_cromossomos, int tamanho_pai)
 	for(int i=0; i<numero_cromossomos;i++){
 		notas[i]=0;
 	}
+
+	int qtd_genes = tamanho_pai;
 	
 	//somando a quantidades de 1s em cada cromossomo (FUNÇÂO FITNESS)
 	for(int i=0; i<numero_cromossomos;i++){
 		for(int j=0;j<tamanho_pai;j++){
-			notas[i] += matriz_pop[i][j];// função fitness, pode seralterada aqui
+			notas[i] += matriz_pop[i][j];// AQUI somente somatório // função fitness, pode seralterada aqui
 			
 		}
+		notas[i] = cos(pow(notas[i]-((qtd_genes - 1)/2),2));
 		if(notas[i]==0) notas[i]=1;// para que quem nao tenha sintomas tenha chance de ser selecionado
 	}
 	
@@ -386,6 +388,21 @@ int main(){
 	int numero_cromossomos = 8;//numero de individuos
 	int tamanho_pai=4;//numero de genes
 	int qtd_infect = 5;
+	
+	// ENTRADA DE DADOS
+/*	cout<< "Qtd de indivíduos: ";
+	cin >> numero_cromossomos;
+	cout<< endl;
+
+	cout<< "Qtd de genes: ";
+	cin >> tamanho_pai;
+	cout<< endl;
+	
+	cout<< "Qtd inicial de infectados: ";
+	cin >> qtd_infect;
+	cout<< endl;
+	*/
+	
 	ofstream file;
 	ofstream file_mutation;
 	file.open ("geracao_infect.txt");	
@@ -416,7 +433,7 @@ int main(){
 	*/
 	
 	
-	
+	// ENTRADA DE DADOS
 	inicia_populacao(pop,numero_cromossomos,tamanho_pai,qtd_infect);
 	cout<<"Populacao Inicial: "<<endl;
 	imprime_populacao(pop,numero_cromossomos,tamanho_pai);
@@ -424,11 +441,15 @@ int main(){
 	int * fitness;
 	float * pesos;
 	int geracao = 0;
-	int geracao_max = 50;
+	int geracao_max = 500;
 	int total_infectados=0;
 	int * total_mutacoes = new int[1];
 	total_mutacoes[0]=0;
-	
+
+/*	cout<< "Qtd de gerações: " ;
+	cin >> geracao_max;
+	cout << endl;
+*/
 	//inicia o loop
 	while((geracao!=geracao_max)){
 
@@ -458,9 +479,9 @@ int main(){
 		file_mutation<<geracao<<" "<<total_mutacoes[0] << "\n";
 		geracao++;
 
-		if(total_infectados==numero_cromossomos)
+/*		if(total_infectados==numero_cromossomos)
 			break;
-
+*/
 	}//FIM DO LOOP PRINCIPAL 
 	file.close();
 	file_mutation.close();
@@ -471,7 +492,7 @@ int main(){
 	plotGraphic(geracao_mutacoes);	
 	free(pesos);
 	free(fitness);
-	// FELIPE para COTRIM, ADICIONAR CRITERIO DE PARADA APENAS!!!! provavelmente será apenas numero de gerações.
+
 return 0;
 }
 
